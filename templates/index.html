@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template is working</title>
+    <title>TextUtils</title>
 </head>
 <body>
-    <h1>Welcome to the text analyzer. Enter your test below </h1>
+    <h1>Welcome to the text analyzer. Enter your text below </h1>
     <!-- {{name}} age {{age}} -->
     <form action ='/analyze' method="get">
         <textarea name="text" style="margin: 0px ; width: 721px; height: 93px;"></textarea>
         <br>
-
-        <input type="checkbox" name="analyze"> Remove Punctuations <br>
+        <input type="checkbox" name="removepunc">Remove Punctuations<br>
+        <input type="checkbox" name="fullcaps">UPPER CASE<br>
+        <input type="checkbox" name="newlineremover">New Line Remover<br>
+        <input type="checkbox" name="lowcaps">Lower Case<br>
+        <input type="checkbox" name="extraspaceremover">Remove Extra Spaces<br>
         <button type="submit">Analyze Text</button>
     </form>
 </body>
