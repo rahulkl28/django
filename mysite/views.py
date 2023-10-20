@@ -8,13 +8,13 @@ def index(request):
 
 def analyze(request):
     # Analyze the text 
-    djtext = request.GET.get('text', 'default')
+    djtext = request.POST.get('text', 'default')
 
-    removepunc = request.GET.get('removepunc', 'off')
-    fullcaps = request.GET.get('fullcaps', 'off')
-    lowcaps = request.GET.get('lowcaps', 'off')
-    newlineremover = request.GET.get('newlineremover', 'off')
-    extraspaceremover = request.GET.get('extraspaceremover', 'off')
+    removepunc = request.POST.get('removepunc', 'off')
+    fullcaps = request.POST.get('fullcaps', 'off')
+    lowcaps = request.POST.get('lowcaps', 'off')
+    newlineremover = request.POST.get('newlineremover', 'off')
+    extraspaceremover = request.POST.get('extraspaceremover', 'off')
     
     #check which checkbox is on
     if removepunc == "on":
@@ -24,36 +24,43 @@ def analyze(request):
             if char not in punctuations:
                 analyzed = analyzed + char
         params = {'purpose': 'Removed Punctuations', 'analyzed_text': analyzed}
-        return render(request, 'analyze.html', params)
+        djtext = analyzed
+        
 
-    elif(fullcaps == "on"):
+    if(fullcaps == "on"):
         analyzed = ""
         for char in djtext:
             analyzed = analyzed + char.upper()
         params = {'purpose': 'Changed to Uppercase', 'analyzed_text': analyzed}
-        return render(request, 'analyze.html', params)
+        djtext = analyzed
+        
     
-    elif(lowcaps == "on"):
+    if(lowcaps == "on"):
         analyzed = ""
         for char in djtext:
             analyzed = analyzed + char.lower()
         params = {'purpose': 'Changed to Lowercase', 'analyzed_text': analyzed}
-        return render(request, 'analyze.html', params)
+        djtext = analyzed
+        
 
-    elif(newlineremover == "on"):
+    if(newlineremover == "on"):
         analyzed = ""
         for char in djtext:
-            if char != "\n":
+            if char != "\n" and char != "\r":
                 analyzed = analyzed + char
         params = {'purpose': 'Removed new lines', 'analyzed_text': analyzed}
-        return render(request, 'analyze.html', params)
+        djtext = analyzed
+        
 
-    elif(extraspaceremover == "on"):
+    if(extraspaceremover == "on"):
         analyzed = ""
         for index, char in enumerate(djtext):
             if not (djtext[index] == " " and djtext[index+1] == " "):
                 analyzed = analyzed + char
         params = {'purpose': 'Remove Extra Spaces between Text', 'analyzed_text': analyzed}
-        return render(request, 'analyze.html', params)
-    else:
-        return HttpResponse("Error, Something went wrong")
+    
+    if(removepunc != "on" and fullcaps != "on" and lowcaps != "on" and newlineremover != "on" and extraspaceremover != "on"):
+        return HttpResponse("Error, Please select any operation")
+
+
+    return render(request, 'analyze.html', params)
